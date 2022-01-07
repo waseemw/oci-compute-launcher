@@ -1,0 +1,8 @@
+# IDE Config
+.idea
+
+# Build
+*.exe
+
+# Personal
+.env
