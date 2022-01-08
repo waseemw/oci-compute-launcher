@@ -27,14 +27,17 @@ func main() {
 	image := os.Getenv("OCI_IMAGE")
 	shape := os.Getenv("COMPUTE_SHAPE")
 	name := os.Getenv("COMPUTE_NAME")
+
 	cpuInt, err := strconv.Atoi(os.Getenv("COMPUTE_CPU"))
 	memInt, err := strconv.Atoi(os.Getenv("COMPUTE_MEM"))
-	fmt.Printf("Will launch %s, %d CPU, %d GB \n\n", shape, cpuInt, memInt)
+	volInt, err := strconv.Atoi(os.Getenv("COMPUTE_VOL"))
+	fmt.Printf("Will launch %s, %d CPU, %d MEM, %d VOL \n\n", shape, cpuInt, memInt, volInt)
 
 	helpers.FatalIfError(err)
 	helpers.FatalIfError(err)
 	cpu := float32(cpuInt)
 	mem := float32(memInt)
+	vol := int64(volInt)
 	configProvider := common.NewRawConfigurationProvider(tenancy, user, region, fingerPrint, string(keyBytes), nil)
 	identityClient, err := identity.NewIdentityClientWithConfigurationProvider(configProvider)
 	helpers.FatalIfError(err)
@@ -59,7 +62,7 @@ func main() {
 						MemoryInGBs: &mem,
 					},
 					AvailabilityDomain: item.Name,
-					SourceDetails:      core.InstanceSourceViaImageDetails{ImageId: &image},
+					SourceDetails:      core.InstanceSourceViaImageDetails{ImageId: &image, BootVolumeSizeInGBs: &vol},
 				},
 			})
 			if err != nil {

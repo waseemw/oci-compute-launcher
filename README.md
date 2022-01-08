@@ -15,7 +15,7 @@ rate limiting). Once the instance is created, the instance ID will be printed an
 3. Create a `.env` file as a copy of `.env.example`
 4. Set the credentials variables with the info you get by adding an API Key in user settings in the OCI web interface
 5. Set the Resource IDs variables, by going to each resource on OCI and copying the OCID
-6. Set the Compute Config variables as you prefer. The values in `.env.example` are set for the always-free tier limits, given that you
+6. Set the Compute Config variables as you prefer, shape, name, number of CPUs, memory size, and boot volume size in GBs. The values in `.env.example` are set for the always-free tier limits, given that you
    don't have any other Ampere-based Compute instances.
 7. Run the executable in the same directory as your `.env` file
 
