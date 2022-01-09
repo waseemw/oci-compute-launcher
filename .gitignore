@@ -1,8 +1,5 @@
-# IDE Config
+# IDE config
 .idea
 
-# Build
-*.exe
-
-# Personal
-.env
+# Binary files
+bin/
