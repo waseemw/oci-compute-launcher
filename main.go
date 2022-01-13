@@ -17,7 +17,7 @@ import (
 
 func main() {
 	helpers.FatalIfError(godotenv.Load())
-	keyBytes, err := os.ReadFile(os.Getenv("OCI_KEY_PATH"))
+	keyBytes, err := os.ReadFile(os.Getenv("OCI_PRIVATE_KEY_PATH"))
 	helpers.FatalIfError(err)
 	tenancy := os.Getenv("OCI_TENANCY")
 	user := os.Getenv("OCI_USER")
@@ -27,6 +27,8 @@ func main() {
 	image := os.Getenv("OCI_IMAGE")
 	shape := os.Getenv("COMPUTE_SHAPE")
 	name := os.Getenv("COMPUTE_NAME")
+	sshKey := os.Getenv("SSH_PUBLIC_KEY")
+	privateIp := os.Getenv("NETWORK_PRIVATE_IP")
 
 	cpuInt, err := strconv.Atoi(os.Getenv("COMPUTE_CPU"))
 	memInt, err := strconv.Atoi(os.Getenv("COMPUTE_MEM"))
@@ -54,7 +56,8 @@ func main() {
 					CompartmentId: &tenancy,
 					Shape:         &shape,
 					CreateVnicDetails: &core.CreateVnicDetails{
-						SubnetId: &subnet,
+						SubnetId:  &subnet,
+						PrivateIp: &privateIp,
 					},
 					DisplayName: &name,
 					ShapeConfig: &core.LaunchInstanceShapeConfigDetails{
@@ -63,6 +66,9 @@ func main() {
 					},
 					AvailabilityDomain: item.Name,
 					SourceDetails:      core.InstanceSourceViaImageDetails{ImageId: &image, BootVolumeSizeInGBs: &vol},
+					Metadata: map[string]string{
+						"ssh_authorized_keys": sshKey,
+					},
 				},
 			})
 			if err != nil {
